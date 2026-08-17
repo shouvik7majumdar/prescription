@@ -32,9 +32,11 @@ The Doctor Portal enables authorized healthcare professionals to securely issue 
 
 The Confidential Prescription Verification platform is deployed and publicly accessible on Vercel. Explore the production application to experience privacy-preserving prescription issuance, Zero-Knowledge verification, authorized doctor workflows, and authentic Lace Wallet connectivity on Midnight Preprod.
 
-▶ **[Open the Live Application](https://confidential-prescriptionnn.vercel.app/)**
+▶ **[Open the Live Application](https://prescription-pearl.vercel.app/)**
 
 ---
+
+# 🎥 Live Demo
 
 # 🎥 Live Demo
 
