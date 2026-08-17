@@ -28,14 +28,14 @@ The **Confidential Prescription Verification Platform (RxVerify)** is a producti
 # Application Preview
 
 ## Landing Page & Overview
-![Landing Page](https://raw.githubusercontent.com/shouvik7majumdar/prescription/main/docs/screenshots/overview.png)
+![Landing Page](docs/screenshots/overview.png)
 
 The landing dashboard provides a real-time overview of the Confidential Prescription Verification Platform, presenting healthcare telemetry, Zero-Knowledge analytics, approved providers, verification statistics, authentic Midnight Lace Wallet connectivity, and the overall privacy status of the Midnight Network. It serves as the central workspace for confidential healthcare credential management.
 
 ---
 
 ## Doctor Portal (Certified Prescriber Workspace)
-![Doctor Portal](https://raw.githubusercontent.com/shouvik7majumdar/prescription/main/docs/screenshots/doctor-portal.png)
+![Doctor Portal](docs/screenshots/doctor-portal.png)
 
 The Doctor Portal enables authorized healthcare professionals to securely issue digitally signed confidential prescriptions. Doctors can select approved providers, define medication details, configure expiry dates, and generate privacy-preserving prescription credentials protected by Midnight Protocol with single-use nullifiers.
 
