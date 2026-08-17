@@ -41,6 +41,13 @@ The Doctor Portal enables authorized healthcare professionals to securely issue 
 
 ---
 
+## Prescription Verification (Pharmacy Verification Portal)
+![Prescription Verification](docs/screenshots/verification.png)
+
+The Pharmacy Verification Portal allows licensed pharmacies to instantly verify confidential prescriptions on-chain by evaluating Zero-Knowledge proofs, confirming nullifier status, and validating prescriber signatures without exposing patient Personal Health Information (PHI).
+
+---
+
 # Problem Statement
 
 Traditional electronic prescription networks and public blockchain applications suffer from a fundamental privacy flaw: verifying a credential requires presenting full medical records to verifiers, insurance providers, and public ledgers.
