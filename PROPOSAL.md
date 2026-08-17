@@ -157,3 +157,6 @@ The contract is live on **Midnight Preprod**:
 - **Federated EHR Standards**: Direct integration with FHIR (Fast Healthcare Interoperability Resources) and HL7.
 - **Multi-Signature Controlled Substances**: Require co-signatures from secondary prescribers for Schedule II medications.
 - **Decentralized Identifiers (DIDs)**: Integrate W3C DIDs for verifiable doctor medical license credentials.
+
+
+<!-- Updated for Midnight Preprod & Next.js App Router -->
