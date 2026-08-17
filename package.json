@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier || $HOME/.local/bin/compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier",
-    "build": "next build",
+    "build": "next build && mkdir -p dist && cp -r .next/* dist/ 2>/dev/null || true",
     "setup": "npx tsx src/setup.ts",
     "deploy": "npx tsx src/deploy.ts",
     "cli": "npx tsx src/cli.ts",
