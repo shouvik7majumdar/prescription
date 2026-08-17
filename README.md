@@ -17,35 +17,14 @@ The **Confidential Prescription Verification Platform (RxVerify)** is a producti
 ## Landing Page & Overview
 ![Landing Page](docs/screenshots/overview.png)
 
-The landing dashboard provides a real-time overview of the Confidential Prescription Verification Platform, presenting healthcare telemetry, Zero-Knowledge analytics, approved providers, verification statistics, and the overall privacy status of the Midnight Network.
+The landing dashboard provides a real-time overview of the Confidential Prescription Verification Platform, presenting healthcare telemetry, Zero-Knowledge analytics, approved providers, verification statistics, authentic Midnight Lace Wallet connectivity, and the overall privacy status of the Midnight Network.
 
 ---
 
-## Authentic Lace Wallet Integration
-![Lace Wallet Integration](docs/screenshots/lace-wallet.png)
+## Doctor Portal (Certified Prescriber Workspace)
+![Doctor Portal](docs/screenshots/doctor-portal.png)
 
-Authentic integration with the Midnight Lace Wallet browser extension (`window.midnight.mnLace`). Triggers official user permission popups, resolves Bech32 account addresses (`mn_addr_preprod...`), detects Midnight Preprod network state, and manages transaction signing.
-
----
-
-## Prescription Issue Workspace
-![Prescription Issue Page](docs/screenshots/prescription.png)
-
-The Doctor Portal enables authorized healthcare professionals to securely issue digitally signed confidential prescriptions. Doctors generate live SHA-256 digests, apply ECDSA doctor signatures, and compute nullifier commitments protected by Midnight Protocol.
-
----
-
-## Pharmacy ZK Verification Portal
-![Pharmacy Verification Page](docs/screenshots/verification.png)
-
-The Pharmacy Verification Portal allows licensed pharmacies to instantly verify confidential prescriptions using Zero-Knowledge Proofs without exposing sensitive medical information or allowing double-dispensing through nullifier replay protection.
-
----
-
-## Public Ledger Explorer & Analytics
-![Public Ledger Explorer](docs/screenshots/analytics.png)
-
-Public ledger inspector querying on-chain parameters (`verificationCount`, `contractActive`, `usedNullifiers`) alongside off-chain private witness state indicators.
+The Doctor Portal enables authorized healthcare professionals to securely issue digitally signed confidential prescriptions. Doctors define patient information, medication details, and prescribers, while generating live cryptographic SHA-256 digests, doctor signatures, and single-use nullifiers.
 
 ---
 
