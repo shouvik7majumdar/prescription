@@ -18,7 +18,7 @@ The **Confidential Prescription Verification Platform (RxVerify)** is a producti
 | :--- | :--- | :--- |
 | 🌐 **Live Application** | Deployed web application on Vercel | [Live Demo](https://prescription-pearl.vercel.app/) |
 | 🐙 **GitHub Repository** | Open-source monorepo codebase | [GitHub Repo](https://github.com/shouvik7majumdar/prescription.git) |
-| 🎥 **Demo Video** | Interactive application walkthrough | [Watch Demo Video](https://youtu.be/-8m0TcUsUUc) |
+| 🎥 **Demo Video** | Interactive application walkthrough | [Watch Demo Video](https://youtu.be/Qdy1CNWdPaE) |
 | ⚙️ **CI/CD Workflow** | GitHub Actions build & verification pipeline | [View CI/CD Pipeline](https://github.com/shouvik7majumdar/prescription/actions/workflows/ci.yml) |
 | 🔍 **Smart Contract Explorer** | Midnight Preprod Network Explorer / Indexer | [Midnight Explorer](https://indexer.preprod.midnight.network/api/v4/graphql) |
 | 📄 **Product Proposal** | Complete project documentation and specs | [PROPOSAL.md](PROPOSAL.md) |
