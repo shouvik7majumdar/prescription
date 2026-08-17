@@ -1,9 +1,9 @@
 // tests/contract.test.ts
 // Tests verifying contract structure assumptions and initial state.
 import { describe, it, expect } from 'vitest';
-import { readFileSync, existsSync } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync, existsSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -26,6 +26,16 @@ describe('Contract Structure', () => {
   it('must declare doctorSignature as a witness function', () => {
     const src = readFileSync(path.resolve(__dirname, '../contracts/prescription-verifier.compact'), 'utf-8');
     expect(src).toMatch(/witness doctorSignature\(\)/);
+  });
+
+  it('must declare nullifier as a witness function', () => {
+    const src = readFileSync(path.resolve(__dirname, '../contracts/prescription-verifier.compact'), 'utf-8');
+    expect(src).toMatch(/witness nullifier\(\)/);
+  });
+
+  it('must declare usedNullifiers Map in public ledger state', () => {
+    const src = readFileSync(path.resolve(__dirname, '../contracts/prescription-verifier.compact'), 'utf-8');
+    expect(src).toMatch(/export ledger usedNullifiers: Map<Bytes<32>, Boolean>/);
   });
 
   it('must export activate and deactivate admin circuits', () => {

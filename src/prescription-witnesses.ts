@@ -6,7 +6,7 @@
 // The ZK proof proves the data satisfies circuit constraints without
 // revealing the data itself.
 
-import { createHash } from 'node:crypto';
+import { createHash } from 'crypto';
 
 // ─── Private State Shape ──────────────────────────────────────────────────────
 // This is the local private state stored by the level-db private state provider.
@@ -17,6 +17,8 @@ export interface PrescriptionPrivateState {
   prescriptionHash: Uint8Array;
   // Doctor's signature over the prescription hash (64 bytes)
   doctorSignature: Uint8Array;
+  // Single-use verification nullifier (32 bytes) for on-chain replay protection
+  nullifier: Uint8Array;
 }
 
 // ─── Default empty private state ─────────────────────────────────────────────
@@ -25,6 +27,7 @@ export interface PrescriptionPrivateState {
 export const emptyPrivateState: PrescriptionPrivateState = {
   prescriptionHash: new Uint8Array(32), // all zeros = invalid, will fail circuit assertion
   doctorSignature: new Uint8Array(64),  // all zeros = invalid, will fail circuit assertion
+  nullifier: new Uint8Array(32),        // all zeros = invalid, will fail circuit assertion
 };
 
 // ─── Witness functions ────────────────────────────────────────────────────────
@@ -39,6 +42,10 @@ export const prescriptionWitnesses = {
   doctorSignature(context: { privateState: PrescriptionPrivateState }): [PrescriptionPrivateState, Uint8Array] {
     return [context.privateState, context.privateState.doctorSignature];
   },
+
+  nullifier(context: { privateState: PrescriptionPrivateState }): [PrescriptionPrivateState, Uint8Array] {
+    return [context.privateState, context.privateState.nullifier];
+  },
 };
 
 // ─── Helpers for building private state ──────────────────────────────────────
@@ -50,6 +57,18 @@ export const prescriptionWitnesses = {
  */
 export function hashPrescription(prescriptionText: string): Uint8Array {
   return new Uint8Array(createHash('sha256').update(prescriptionText).digest());
+}
+
+/**
+ * Calculate a 32-byte SHA-256 nullifier for replay protection.
+ * Derived off-chain from prescriptionHash + patient secret / nonce.
+ */
+export function calculateNullifier(prescriptionHash: Uint8Array, secret: string = 'prescription-nullifier-v1'): Uint8Array {
+  return new Uint8Array(
+    createHash('sha256')
+      .update(Buffer.concat([prescriptionHash, Buffer.from(secret)]))
+      .digest()
+  );
 }
 
 /**
@@ -68,13 +87,14 @@ export function mockDoctorSignature(prescriptionHash: Uint8Array): Uint8Array {
 }
 
 /**
- * Build a full private state from raw prescription text.
+ * Build a full private state from raw prescription text and optional nullifier secret.
  * This is called before invoking the verifyPrescription circuit.
  */
-export function buildPrivateState(prescriptionText: string): PrescriptionPrivateState {
+export function buildPrivateState(prescriptionText: string, secret?: string): PrescriptionPrivateState {
   const hash = hashPrescription(prescriptionText);
   return {
     prescriptionHash: hash,
     doctorSignature: mockDoctorSignature(hash),
+    nullifier: calculateNullifier(hash, secret),
   };
 }

@@ -379,3 +379,9 @@ export function parseQRPayload(qrString: string): {
     return null;
   }
 }
+
+
+/**
+ * Calculate a 32-byte SHA-256 nullifier for on-chain replay protection.
+ */
+export { calculateNullifier, buildPrivateState } from './prescription-witnesses';

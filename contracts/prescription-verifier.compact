@@ -2,21 +2,38 @@ pragma language_version >= 0.23;
 
 import CompactStandardLibrary;
 
+// Public ledger state
 export ledger verificationCount: Uint<64>;
 export ledger contractActive: Boolean;
+export ledger usedNullifiers: Map<Bytes<32>, Boolean>;
 
+// Private witness functions (executed locally off-chain)
 witness prescriptionHash(): Bytes<32>;
 witness doctorSignature(): Bytes<64>;
+witness nullifier(): Bytes<32>;
 
+// Verification circuit enforcing zero-knowledge privacy and single-use nullifier replay protection
 export circuit verifyPrescription(patientId: Uint<32>): [] {
     assert(contractActive == true, "Contract is not accepting verifications");
+
     const hash = prescriptionHash();
     const sig  = doctorSignature();
-    const hashFirstByte = hash[0];
-    assert(hashFirstByte != 0x00, "Prescription hash must be non-zero");
-    const sigFirstByte = sig[0];
-    assert(sigFirstByte != 0x00, "Doctor signature must be non-zero");
+    const nullif = disclose(nullifier());
+
+    assert(hash[0] != 0x00, "Prescription hash must be non-zero");
+    assert(sig[0] != 0x00, "Doctor signature must be non-zero");
+    assert(nullif[0] != 0x00, "Nullifier must be non-zero");
+
+    // Replay Protection: Ensure nullifier has not been recorded on-chain previously
+    assert(!usedNullifiers.member(nullif), "Prescription verification commitment already submitted");
+
+    // Record nullifier on-chain to prevent future reuse
+    usedNullifiers.insert(nullif, true);
+
+    // Disclose session metadata (patient slot ID)
     disclose(patientId);
+
+    // Increment public verification counter
     verificationCount = (verificationCount + 1) as Uint<64>;
 }
 

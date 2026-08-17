@@ -59,3 +59,7 @@ temp/
 .midnight-wallet-state/
 
 midnight-level-db/
+
+# Next.js build output
+.next/
+*.tsbuildinfo

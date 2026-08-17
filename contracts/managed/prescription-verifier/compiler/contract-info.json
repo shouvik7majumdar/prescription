@@ -65,6 +65,15 @@
         "type-name": "Bytes",
         "length": 64
       }
+    },
+    {
+      "name": "nullifier",
+      "arguments": [
+      ],
+      "result type": {
+        "type-name": "Bytes",
+        "length": 32
+      }
     }
   ],
   "contracts": [
@@ -86,6 +95,19 @@
       "exported": true,
       "storage": "Cell",
       "type": {
+        "type-name": "Boolean"
+      }
+    },
+    {
+      "name": "usedNullifiers",
+      "index": 2,
+      "exported": true,
+      "storage": "Map",
+      "key": {
+        "type-name": "Bytes",
+        "length": 32
+      },
+      "value": {
         "type-name": "Boolean"
       }
     }

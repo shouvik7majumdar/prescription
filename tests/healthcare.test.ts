@@ -1,5 +1,5 @@
 // tests/healthcare.test.ts
-// Unit tests for healthcare platform capabilities: Doctor Verification, Expiry, QR Tokens, Revocation, and Allowlists.
+// Unit tests for healthcare platform capabilities: Doctor Verification, Expiry, QR Tokens, Revocation, and Replay Protection.
 
 import { describe, it, expect } from 'vitest';
 import {
@@ -15,6 +15,8 @@ import {
   encodeQRPayload,
   parseQRPayload,
   Prescription,
+  calculateNullifier,
+  buildPrivateState,
 } from '../src/healthcare-services';
 
 describe('Doctor & Hospital Allowlist', () => {
@@ -105,6 +107,31 @@ describe('Doctor Digital Signatures & Hash Verification', () => {
     const sig = generateDoctorSignature(pHash, doctor.publicKey);
     expect(verifyDoctorSignature(pHash, sig, doctor.publicKey)).toBe(true);
     expect(verifyDoctorSignature(pHash, sig, 'invalid-key')).toBe(false);
+  });
+});
+
+describe('Nullifier Replay Protection Calculation', () => {
+  it('should calculate valid 32-byte nullifiers for replay protection', () => {
+    const pHashHex = calculatePrescriptionHash({
+      patientId: 303,
+      medicationName: 'Amphetamine Salt Combo 10mg',
+      dosage: '1 tablet in morning',
+      doctorId: 'doc-102',
+      issueDate: '2026-07-26',
+      expiryDate: '2026-08-26',
+    });
+    const hashBytes = new Uint8Array(Buffer.from(pHashHex, 'hex'));
+    const nullifier = calculateNullifier(hashBytes, 'patient-secret-nonce-1');
+
+    expect(nullifier.length).toBe(32);
+    expect(nullifier[0]).not.toBe(0x00);
+  });
+
+  it('should populate private state with hash, signature, and nullifier', () => {
+    const state = buildPrivateState('Amoxicillin 500mg — Dr. Jenkins', 'patient-secret-99');
+    expect(state.prescriptionHash.length).toBe(32);
+    expect(state.doctorSignature.length).toBe(64);
+    expect(state.nullifier.length).toBe(32);
   });
 });
 
