@@ -109,8 +109,8 @@ The smart contract is deployed on the **Midnight Preprod Network**:
 | **Deployed Contract Address** | `58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c` |
 | **Deployment Tx Hash** | `c8f9a9da1597b1bddca694440545796994d9d186db2f36c58e1e74340e5a2506` |
 | **Deployer Public Address** | `mn_addr_preprod1px4wlhx9j8rjndlftwx6xc735h8c7evjl3zz9408t88vuw32xw6qdgt0rw` |
-| **Explorer / Indexer Verification** | [Midnight Preprod GraphQL Indexer](https://indexer.preprod.midnight.network/api/v4/graphql) |
-| **Indexer GraphQL API** | `https://indexer.preprod.midnight.network/api/v4/graphql` |
+| **Explorer Verification** | [Midnight NightScan Explorer](https://nightscan.io/?network=preprod) (Search Contract Address or Tx Hash) |
+| **Indexer GraphQL API** | `https://indexer.preprod.midnight.network/api/v4/graphql` (GraphQL POST Endpoint) |
 | **Circuits Deployed** | `verifyPrescription` |
 
 ---
