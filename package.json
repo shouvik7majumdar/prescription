@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier || $HOME/.local/bin/compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier",
-    "build": "next build && mkdir -p dist && cp -r .next/* dist/ 2>/dev/null || true",
+    "build": "next build",
     "setup": "npx tsx src/setup.ts",
     "deploy": "npx tsx src/deploy.ts",
     "cli": "npx tsx src/cli.ts",
@@ -19,7 +19,6 @@
     "test": "npx vitest run",
     "test:watch": "npx vitest",
     "test:e2e": "tsx scripts/e2e-check.ts",
-    "dev:ui": "cd ui && npm run dev",
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint"
