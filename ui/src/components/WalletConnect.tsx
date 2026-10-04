@@ -8,19 +8,41 @@ interface WalletConnectProps {
   onError: (msg: string) => void;
 }
 
+// Prefer Lace, otherwise use any wallet that implements the Midnight DApp Connector v4 API
+function findMidnightWallet(): any {
+  const midnight = (window as any).midnight;
+  if (!midnight) return undefined;
+  if (midnight.mnLace) return midnight.mnLace;
+  return Object.values(midnight).find(
+    (w: any) => typeof w?.apiVersion === 'string' && w.apiVersion.startsWith('4') && typeof w.connect === 'function'
+  );
+}
+
 export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: WalletConnectProps) {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const connect = async () => {
     setIsConnecting(true);
     try {
-      // Attempt to connect to Lace wallet (Midnight extension)
-      if (typeof window !== 'undefined' && (window as any).midnight?.mnLace) {
-        const lace = (window as any).midnight.mnLace;
-        const enabled = await lace.enable();
-        const address = await enabled.getAddress?.() || 'mn_addr_...';
-        const coinPublicKey = await enabled.coinPublicKey?.() || 'cpk_...';
-        const networkId = await enabled.getNetworkId?.() || import.meta.env.VITE_NETWORK || 'undeployed';
+      // Attempt to connect to Lace or another Midnight wallet extension
+      const midnightWallet = typeof window !== 'undefined' ? findMidnightWallet() : undefined;
+      if (midnightWallet) {
+        let address: any;
+        let coinPublicKey: any;
+        let networkId: string;
+        if (typeof midnightWallet.connect === 'function' && String(midnightWallet.apiVersion).startsWith('4')) {
+          // Midnight DApp Connector v4 API
+          const api = await midnightWallet.connect(import.meta.env.VITE_NETWORK || 'undeployed');
+          const addresses = await api.getShieldedAddresses();
+          address = addresses.shieldedAddress;
+          coinPublicKey = addresses.shieldedCoinPublicKey;
+          networkId = (await api.getConfiguration()).networkId || import.meta.env.VITE_NETWORK || 'undeployed';
+        } else {
+          const enabled = await midnightWallet.enable();
+          address = await enabled.getAddress?.() || 'mn_addr_...';
+          coinPublicKey = await enabled.coinPublicKey?.() || 'cpk_...';
+          networkId = await enabled.getNetworkId?.() || import.meta.env.VITE_NETWORK || 'undeployed';
+        }
 
         onConnect({
           address,

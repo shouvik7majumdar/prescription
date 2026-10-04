@@ -19,6 +19,16 @@ interface LaceWalletContextType {
   isLaceAvailable: boolean;
 }
 
+// Prefer Lace, otherwise use any wallet that implements the Midnight DApp Connector v4 API
+const findMidnightWallet = (): any => {
+  const midnight = (window as any).midnight;
+  if (!midnight) return undefined;
+  if (midnight.mnLace) return midnight.mnLace;
+  return Object.values(midnight).find(
+    (w: any) => typeof w?.apiVersion === 'string' && w.apiVersion.startsWith('4') && typeof w.connect === 'function'
+  );
+};
+
 const LaceWalletContext = createContext<LaceWalletContextType>({
   wallet: null,
   isConnecting: false,
@@ -36,7 +46,7 @@ export const LaceWalletProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const hasLace = !!(window as any).midnight?.mnLace;
+      const hasLace = !!findMidnightWallet();
       setIsLaceAvailable(hasLace);
 
       // Check local storage for persistent connection state
@@ -55,14 +65,26 @@ export const LaceWalletProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setIsConnecting(true);
     setError(null);
     try {
-      if (typeof window !== 'undefined' && (window as any).midnight?.mnLace) {
-        // Authentic Midnight Lace Wallet API call
-        const lace = (window as any).midnight.mnLace;
-        const enabled = await lace.enable(); // Triggers authentic Lace popup
-        const address = (await enabled.getAddress?.()) || 'mn_addr_preprod1...';
-        const cpk = await enabled.coinPublicKey?.();
-        const coinPublicKey = typeof cpk === 'string' ? cpk : JSON.stringify(cpk || {});
-        const networkId = (await enabled.getNetworkId?.()) || 'preprod';
+      const midnightWallet = typeof window !== 'undefined' ? findMidnightWallet() : undefined;
+      if (midnightWallet) {
+        let address: string;
+        let coinPublicKey: string;
+        let networkId: string;
+        if (typeof midnightWallet.connect === 'function' && String(midnightWallet.apiVersion).startsWith('4')) {
+          // Midnight DApp Connector v4 API (Lace, 1AM, ...)
+          const api = await midnightWallet.connect('preprod');
+          const { shieldedAddress, shieldedCoinPublicKey } = await api.getShieldedAddresses();
+          address = shieldedAddress;
+          coinPublicKey = shieldedCoinPublicKey;
+          networkId = (await api.getConfiguration()).networkId || 'preprod';
+        } else {
+          // Authentic Midnight Lace Wallet API call
+          const enabled = await midnightWallet.enable(); // Triggers authentic Lace popup
+          address = (await enabled.getAddress?.()) || 'mn_addr_preprod1...';
+          const cpk = await enabled.coinPublicKey?.();
+          coinPublicKey = typeof cpk === 'string' ? cpk : JSON.stringify(cpk || {});
+          networkId = (await enabled.getNetworkId?.()) || 'preprod';
+        }
 
         const state: WalletState = {
           address,
